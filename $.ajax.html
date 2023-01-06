@@ -10,13 +10,30 @@
 <body>
     <h1>Oque é o $.ajax?</h1>    
     <ul>
-        <li>Faz parte de uma bibliotea Javascript chamada Jquery</li>
+        <li>Faz parte de uma bibliotea JavaScript chamada Jquery</li>
         <li>Com uma sintaxe bastante simples (comparado ao XMLHttpRequest) permite enviar e tratar o resultado de requisições assincronas</li>
     </ul>
-
     <button>Fazer requisição get com $.ajax!</button>
+    <div style="display: flex; justify-content: between; gap:15px;">
+        <p id="first_name"></p>
+        <p id="last_name"></p>
+        <p id="email"></p>
+        <img id="avatar">
+    </div>
     <script>
-        
+        $("button").on('click', () => {
+            $.ajax({
+                type: 'GET',
+                url: 'https://reqres.in/api/users',
+                success: function(response) {
+                    let randomPerson = response.data[Math.floor(Math.random() * response.data.length)];
+                    $("#first_name").html(randomPerson.first_name);
+                    $("#last_name").html(randomPerson.last_name);
+                    $("#email").html(randomPerson.email);
+                    $("#avatar").attr("src", randomPerson.avatar);
+                }
+            });
+        });
     </script>
 </body>
 </html>
