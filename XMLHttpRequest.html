@@ -12,10 +12,78 @@
     <title>XMLHttpRequest</title>
 </head>
 <body>
-    
-    <button>Fazer requisição get com FETCH!</button>
-    <script>
+    <h1>Oque é o XMLHttpRequest?</h1>
+    <p>XMLHttpRequest foi desenvolvido pela Microsoft, como um objeto ActiveX, para o Internet Explorer 5.0. (Setembro de 1998 ).</p>
+    <p>O objeto XMLHttpRequest permite que as requisições HTTP sejam feitas via browser, permite a comunicação assííncrona com o servidor, através de script (JavaScript)</p>
 
+    <button>Fazer requisição get com XMLHttpRequest!</button>
+    <script>
+        const button = document.querySelector('button');
+        const body = document.querySelector('body');
+        
+        button.addEventListener('click', function () {
+            document.querySelector('table') ? document.querySelector('table').remove() : '';
+            document.querySelector('#errorText') ? document.querySelector('errorText').remove() : '';
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const headRow = document.createElement('tr');
+            const name = document.createElement('th');
+            const hair_color = document.createElement('th');
+            const height = document.createElement('th');
+            const tbody = document.createElement('tbody');
+            
+            name.textContent = 'name';
+            hair_color.textContent = 'hair_color';
+            height.textContent = 'height';
+            height.style.textAlign = 'center';
+
+            table.appendChild(thead);
+            table.style.margin = '10px';
+
+            headRow.appendChild(name);
+            headRow.appendChild(hair_color);
+            headRow.appendChild(height);
+
+            thead.appendChild(headRow);
+
+            table.appendChild(tbody);
+
+            const xhr = new XMLHttpRequest();
+            
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        let results = JSON.parse(this.responseText).results;
+                        console.log(results);
+                        results.forEach((item) => {
+                            const nameRow = document.createElement('td');
+                            const hair_colorRow = document.createElement('td');
+                            const heightRow = document.createElement('td');
+                            const row = document.createElement('tr');
+    
+                            nameRow.textContent = item.name;
+                            hair_colorRow.textContent = item.hair_color;
+                            heightRow.textContent = item.height;
+    
+                            row.appendChild(nameRow);
+                            row.appendChild(hair_colorRow);
+                            row.appendChild(heightRow);
+    
+                            tbody.appendChild(row);
+                        })
+                        body.appendChild(table);
+                    } else {
+                        const errorText = document.createElement('p');
+                        errorText.hair_color = 'errorText';
+                        errorText.textContent = this.status;
+                        body.appendChild(errorText);
+                    }
+                }
+            };
+
+            xhr.open("GET", "https://swapi.dev/api/people", true);
+            xhr.send();
+        })
     </script>
 </body>
 </html>
